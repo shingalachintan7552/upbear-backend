@@ -79,7 +79,7 @@ exports.getCoinsDetails = (req, res) => {
   });
 };
 
-
+//
 // exports.setCoinsDetails = (req, res) => {
 //   Coin.findAll().then((coins) => {
 //     const urls = [
