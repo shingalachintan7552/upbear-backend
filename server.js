@@ -3,12 +3,12 @@ const cors = require("cors");
 
 const app = express();
 
-// var corsOptions = {
-//   origin: "http://127.0.0.1:5173"
-// };
+var corsOptions = {
+  origin: "http://127.0.0.1:5173"
+};
 
 // app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(express.json());
