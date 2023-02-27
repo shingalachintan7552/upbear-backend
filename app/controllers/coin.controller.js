@@ -22,6 +22,7 @@ exports.getCoinsList = (req, res) => {
     console.error(err);
   });
 };
+
 exports.setCoinsDetails = (req, res) => {
   https.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana,binancecoin', (response) => {
     let data = '';
