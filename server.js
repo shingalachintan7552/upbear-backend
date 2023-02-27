@@ -7,7 +7,7 @@ const app = express();
 //   origin: "http://127.0.0.1:5173"
 // };
 
-// app.use(cors());
+app.use(cors());
 // app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
