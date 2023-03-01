@@ -6,6 +6,14 @@ module.exports = (sequelize, Sequelize) => {
     email: {
       type: Sequelize.STRING
     },
+    email_marketing: {
+      type: Sequelize.ENUM('yes', 'no'),
+      allowNull: false
+    },
+    terms_condition: {
+      type: Sequelize.ENUM('yes', 'no'),
+      allowNull: false
+    },
     password: {
       type: Sequelize.STRING
     }

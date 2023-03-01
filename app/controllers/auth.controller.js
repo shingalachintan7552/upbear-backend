@@ -13,7 +13,9 @@ exports.signup = (req, res) => {
   User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    email_marketing: req.body.email_marketing,
+    terms_condition: req.body.terms_condition
   })
     .then(user => {
       if (req.body.roles) {
@@ -43,12 +45,12 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username
+      email: req.body.email
     }
   })
     .then(async (user) => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "User Email Not found." });
       }
 
       const passwordIsValid = bcrypt.compareSync(

@@ -3,12 +3,12 @@ const cors = require("cors");
 
 const app = express();
 
-// var corsOptions = {
-//   origin: "http://127.0.0.1:5173"
-// };
+var corsOptions = {
+  origin: "http://127.0.0.1:5173"
+};
 
-app.use(cors());
-// app.use(cors(corsOptions));
+// app.use(cors());
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -21,12 +21,12 @@ const db = require("./app/models");
 const Role = db.role;
 const Coin = db.coin;
 
-db.sequelize.sync();
+// db.sequelize.sync();
 // force: true will drop the table if it already exists
-// db.sequelize.sync({force: true}).then(() => {
-//   console.log('Drop and Resync Database with { force: true }');
-//   initial();
-// });
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Database with { force: true }');
+  initial();
+});
 
 // simple route
 app.get("/", (req, res) => {
