@@ -93,7 +93,7 @@ function initial() {
   
   Coin.create({
     id: 4,
-    name:"Binance",
+    name:"BNB",
     icon: "https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1644979850",
     symbol:"bnb",
     price:0,
