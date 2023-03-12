@@ -24,6 +24,7 @@ db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.refreshToken = require("../models/refreshToken.model.js")(sequelize, Sequelize);
 db.blog = require("../models/blog.model.js")(sequelize, Sequelize);
 db.coin = require("./coin.model.js")(sequelize, Sequelize);
+db.resetpassword = require("./resetpassword.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",

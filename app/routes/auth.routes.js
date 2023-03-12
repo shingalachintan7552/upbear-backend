@@ -27,5 +27,27 @@ module.exports = function(app) {
     ],
     controller.signin
   );
+
+  app.post(
+    "/api/auth/resetpassword", 
+    [
+      verifySignIn.isUserEmail
+    ],
+    controller.resetpassword
+  );
+  
+  app.post(
+    "/api/auth/verify_rp_token", 
+    [
+      verifySignIn.isUserEmail
+    ],
+    controller.verify_rp_token
+  );
+
+  app.post(
+    "/api/auth/newpassword",
+    controller.newpassword
+  );
+
   app.post("/api/auth/refreshtoken", controller.refreshToken);
 };

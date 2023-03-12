@@ -1,9 +1,12 @@
 const db = require("../models");
 const config = require("../config/auth.config");
+const nodemailer = require("../config/nodemailer.config");
 const User = db.user;
 const Role = db.role;
+const Resetpassword = db.resetpassword;
 const RefreshToken = db.refreshToken;
 const Op = db.Sequelize.Op;
+const SendResetPasswordMail = nodemailer.main;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -91,6 +94,81 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+
+exports.resetpassword = (req, res) => {
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  }).then((user) => {
+    if (!user) {
+      return res.status(404).send({ message: "User Email Not found." });
+    }
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < 10; i++) {
+      randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    Resetpassword.upsert({
+      token:randomString,
+      userid: user.id,
+      email:req.body.email
+    },{
+      where: {
+        userid: user.id
+      }
+    }).then((created) => {
+        SendResetPasswordMail({"email":req.body.email,"token":randomString}).then(data=>{
+          console.log(data)
+          res.status(200).send({ response: data });
+        });
+      }).catch(error => {
+        console.error(error);
+      });
+    }).catch(err => {
+    res.status(500).send({ message: err.message });
+  });
+};
+
+exports.verify_rp_token = (req, res) => {
+  Resetpassword.findOne({
+    where: {
+      email: req.body.email,
+      token: req.body.token,
+      updated_at:{
+        [Op.gt]: new Date(new Date() - 900000)
+      }
+    }
+  }).then((user) => {
+    if(user!==null && user!==undefined){
+      res.status(200).send({ status: true });
+    }else{
+      res.status(200).send({ status: false });
+    }
+  }).catch(err => {
+    res.status(500).send({ message: err.message });
+  });
+};
+
+exports.newpassword = (req, res) => {
+  User.update({
+    password: bcrypt.hashSync(req.body.password, 8),
+    },{
+    where: {
+      email: req.body.email,
+    }
+  }).then((user) => {
+    if(user!==null && user!==undefined){
+      res.status(200).send({ status: true, message:"Password Succesfully Updated" });
+    }else{
+      res.status(200).send({ status: false, message:"Something Went To Wrong" });
+    }
+  }).catch(err => {
+    res.status(500).send({ message: err.message });
+  });
+};
+
 
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
