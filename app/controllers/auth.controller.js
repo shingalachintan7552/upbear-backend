@@ -95,7 +95,6 @@ exports.signin = (req, res) => {
     });
 };
 
-
 exports.resetpassword = (req, res) => {
   User.findOne({
     where: {
@@ -120,8 +119,7 @@ exports.resetpassword = (req, res) => {
       }
     }).then((created) => {
         SendResetPasswordMail({"email":req.body.email,"token":randomString}).then(data=>{
-          console.log(data)
-          res.status(200).send({ response: data });
+          res.status(200).send(data);
         });
       }).catch(error => {
         console.error(error);
@@ -169,7 +167,6 @@ exports.newpassword = (req, res) => {
   });
 };
 
-
 exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body;
 
@@ -180,7 +177,7 @@ exports.refreshToken = async (req, res) => {
   try {
     let refreshToken = await RefreshToken.findOne({ where: { token: requestToken } });
 
-    console.log(refreshToken)
+    // console.log(refreshToken)
 
     if (!refreshToken) {
       res.status(403).json({ message: "Refresh token is not in database!" });

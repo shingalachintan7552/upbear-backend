@@ -3,7 +3,9 @@ const axios = require('axios');
 const db = require("../models");
 const config = require("../config/auth.config");
 const Coin = db.coin;
+const FavouriteCoin = db.favouritecoin;
 const Op = db.Sequelize.Op;
+
 exports.getCoinsList = (req, res) => {
   console.log('till here')
   https.get('https://api.coingecko.com/api/v3/coins/list', (response) => {
@@ -77,6 +79,37 @@ exports.getCoinsDetails = (req, res) => {
   })
   .catch((error) => {
     console.log(error);
+  });
+};
+
+exports.addFavCoins = (req, res) => {
+  console.log(JSON.stringify(req.body.userid),"data")
+  console.log(JSON.stringify(req.body.userid),"data")
+  FavouriteCoin.upsert({
+    userid: req.body.userid,
+    favcoins: JSON.stringify(req.body.favcoins)
+  }).then(result => {
+    console.log(result);
+    res.status(200).send({data:result});
+  }).catch(error => {
+    console.log(error);
+  });
+};
+
+exports.getFavCoins = (req, res) => {
+  console.log(JSON.stringify(req.body.userid),"data")
+  FavouriteCoin.findOne({
+    where: {
+      userid: req.body.userid
+    }
+  })
+  .then(async (data) => {
+      res.status(200).send({
+        data: JSON.parse(data.favcoins),
+      });
+  })
+  .catch(err => {
+    res.status(500).send({ message: err.message });
   });
 };
 

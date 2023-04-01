@@ -2,7 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const Blog = db.blog;
 const Op = db.Sequelize.Op;
-var dateFormat = require('dateformat');
+// var dateFormat = require('dateformat');
 
 exports.allBlogsTitle = (req, res) => {
   Blog.findAll().then((blogs) => {
